@@ -1,0 +1,36 @@
+name: Lint & Format Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint_and_format:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x' # 最新のPython 3バージョンを使用
+
+    - name: Install dependencies
+      run: |
+        pip install flake8 black
+
+    - name: Run Flake8 (Linter)
+      run: |
+        flake8 .
+
+    - name: Run Black (Formatter check)
+      # --check: コードをフォーマットせず、フォーマットが必要な場合にエラーを出す
+      # --diff: 変更点を表示
+      run: |
+        black --check --diff .
